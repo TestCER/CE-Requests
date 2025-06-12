@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CE Request Form</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, select, button { display: block; margin-top: 10px; width: 100%; padding: 8px; }
+  </style>
+  <script>
+    function submitForm(event) {
+      event.preventDefault();
+      const data = {
+        tu_id: document.getElementById("tu_id").value,
+        ru_id: document.getElementById("ru_id").value,
+        email: document.getElementById("email").value,
+        consent: document.getElementById("consent").value
+      };
+
+      if (!data.email.includes("@")) return alert("Invalid email");
+
+      fetch("https://hook.us1.make.com/ВАШ-ВЕБХУК", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(() => alert("Request accepted!"))
+      .catch(() => alert("Error, please try again!"));
+    }
+  </script>
+</head>
+<body>
+  <h2>Заповни форму:</h2>
+  <form onsubmit="submitForm(event)">
+    <label for="tu_id">Top User ID:</label>
+    <input id="tu_id" type="number" required>
+
+    <label for="ru_id">Regular User ID:</label>
+    <input id="ru_id" type="number" required>
+
+    <label for="email">Top User Email:</label>
+    <input id="email" type="email" required>
+
+    <label for="consent">Top User Consent:</label>
+    <select id="consent" required>
+      <option value="">--Choose--</option>
+      <option value="yes">Agree</option>
+      <option value="no">Disagree</option>
+    </select>
+
+    <button type="submit">Done</button>
+  </form>
+</body>
+</html>
