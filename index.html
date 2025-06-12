@@ -4,9 +4,76 @@
   <meta charset="UTF-8">
   <title>CE Request Form</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    input, select, button { display: block; margin-top: 10px; width: 100%; padding: 8px; }
-  </style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #222222;
+      --primary-color: #0088cc;
+      --border-radius: 12px;
+      --input-padding: 14px;
+      --font-size: 16px;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: var(--font-size);
+    }
+
+    input, select {
+      padding: var(--input-padding);
+      font-size: var(--font-size);
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-color);
+    }
+
+    button {
+      padding: var(--input-padding);
+      font-size: var(--font-size);
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #006fa1;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+    }
+  </style> 
+  
   <script>
     function submitForm(event) {
       event.preventDefault();
@@ -52,3 +119,4 @@
   </form>
 </body>
 </html>
+
