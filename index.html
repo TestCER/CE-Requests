@@ -72,41 +72,53 @@
         padding: 16px;
       }
     }
-  </style> 
-  
+  </style>
 
-<script>
-  if (Telegram.WebApp) {
-    Telegram.WebApp.ready(); // обов'язково для коректного запуску
-  }
+  <script>
+    if (Telegram.WebApp) {
+      Telegram.WebApp.ready();
+    }
 
-  async function submitForm(event) {
-    event.preventDefault();
-    const data = {
-      tu_id: document.getElementById("tu_id").value,
-      ru_id: document.getElementById("ru_id").value,
-      email: document.getElementById("email").value,
-      consent: document.getElementById("consent").value
-    };
+    async function submitForm(event) {
+      event.preventDefault();
 
-    if (!data.email.includes("@")) return alert("Invalid email");
+      const tu_id = document.getElementById("tu_id").value;
+      const ru_id = document.getElementById("ru_id").value;
+      const email = document.getElementById("email").value;
+      const consent = document.getElementById("consent").value;
 
-    await fetch("https://hook.eu2.make.com/xadouhf11xju3um18boegmdsztgmgnj4", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
+      if (!email.includes("@")) {
+        return alert("Invalid email");
+      }
 
-    Telegram.WebApp.close();
-  }
-</script>
+      if (!tu_id || !ru_id || !email || consent === "") {
+        return alert("Please fill all fields and select consent option.");
+      }
 
+      const data = { tu_id, ru_id, email, consent };
 
-    
+      try {
+        const response = await fetch("https://hook.eu2.make.com/xadouhf11xju3um18boegmdsztgmgnj4", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          Telegram.WebApp.close();
+        } else {
+          alert("Error sending data.");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Connection error.");
+      }
+    }
   </script>
 </head>
+
 <body>
   <h2>Заповни форму:</h2>
   <form onsubmit="submitForm(event)">
@@ -122,12 +134,11 @@
     <label for="consent">Top User Consent:</label>
     <select id="consent" required>
       <option value="">--Choose--</option>
-      <option value="yes">Agree</option>
-      <option value="no">Disagree</option>
+      <option value="yes">Agree to share contact info</option>
+      <option value="no">Do NOT agree to share contact info</option>
     </select>
 
     <button type="submit">Done</button>
   </form>
 </body>
 </html>
-
