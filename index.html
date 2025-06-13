@@ -80,21 +80,36 @@
   Telegram.WebApp.ready(); // обовʼязково для коректного запуску
 }
 
-    function submitForm(event) {
-      event.preventDefault();
-      const data = {
-        tu_id: document.getElementById("tu_id").value,
-        ru_id: document.getElementById("ru_id").value,
-        email: document.getElementById("email").value,
-        consent: document.getElementById("consent").value
-      };
+<script>
+  if (window.Telegram && Telegram.WebApp) {
+    Telegram.WebApp.ready(); // обов'язково для коректного запуску
+  }
 
-      if (!data.email.includes("@")) return alert("Invalid email");
+  async function submitForm(event) {
+    event.preventDefault();
+    const data = {
+      tu_id: document.getElementById("tu_id").value,
+      ru_id: document.getElementById("ru_id").value,
+      email: document.getElementById("email").value,
+      consent: document.getElementById("consent").value
+    };
 
-      Telegram.WebApp.sendData(JSON.stringify(data));
-      Telegram.WebApp.close();
+    if (!data.email.includes("@")) return alert("Invalid email");
 
-    }
+    await fetch("https://hook.eu2.make.com/xadouhf11xju3um18boegmdsztgmgnj4", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    Telegram.WebApp.close();
+  }
+</script>
+
+
+    
   </script>
 </head>
 <body>
