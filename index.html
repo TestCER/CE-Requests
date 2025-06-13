@@ -67,6 +67,12 @@
       background-color: #006fa1;
     }
 
+    #status-message {
+      text-align: center;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
     @media (max-width: 480px) {
       body {
         padding: 16px;
@@ -74,63 +80,64 @@
     }
   </style>
 
-<script>
-  if (Telegram.WebApp) {
-    Telegram.WebApp.ready();
-  }
-
-  async function submitForm(event) {
-    event.preventDefault();
-
-    const tu_id = document.getElementById("tu_id").value;
-    const ru_id = document.getElementById("ru_id").value;
-    const email = document.getElementById("email").value;
-    const consent = document.getElementById("consent").value;
-    const statusMessage = document.getElementById("status-message");
-
-    // Очистити попередній текст
-    statusMessage.textContent = "";
-
-    if (!email.includes("@")) {
-      return alert("Invalid email");
+  <script>
+    if (Telegram.WebApp) {
+      Telegram.WebApp.ready();
     }
 
-    if (!tu_id || !ru_id || !email || consent === "") {
-      return alert("Please fill all fields and select consent option.");
-    }
+    async function submitForm(event) {
+      event.preventDefault();
 
-    const data = { tu_id, ru_id, email, consent };
+      const tu_id = document.getElementById("tu_id").value;
+      const ru_id = document.getElementById("ru_id").value;
+      const email = document.getElementById("email").value;
+      const consent = document.getElementById("consent").value;
+      const statusMessage = document.getElementById("status-message");
 
-    try {
-      const response = await fetch("https://hook.eu2.make.com/xadouhf11xju3um18boegmdsztgmgnj4", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      });
+      statusMessage.textContent = "";
+      statusMessage.style.color = "";
 
-      if (response.ok) {
-        statusMessage.textContent = "Thank you! Your data has been submitted successfully.";
-        statusMessage.style.color = "green";
-        setTimeout(() => {
-          Telegram.WebApp.close();
-        }, 2000); // 2 секунди, щоб встигли побачити
-      } else {
-        alert("Error sending data.");
+      if (!email.includes("@")) {
+        return alert("Invalid email");
       }
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Connection error.");
-    }
-  }
-</script>
 
+      if (!tu_id || !ru_id || !email || consent === "") {
+        return alert("Please fill all fields and select consent option.");
+      }
+
+      const data = { tu_id, ru_id, email, consent };
+
+      try {
+        const response = await fetch("https://hook.eu2.make.com/xadouhf11xju3um18boegmdsztgmgnj4", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          statusMessage.textContent = "Thank you! Your data has been submitted successfully.";
+          statusMessage.style.color = "green";
+          document.querySelector("form").reset();
+
+          setTimeout(() => {
+            Telegram.WebApp.close();
+          }, 2000);
+        } else {
+          alert("Error sending data.");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Connection error.");
+      }
+    }
+  </script>
 </head>
 
 <body>
-  <h2>Заповни форму:</h2> 
-  <p id="status-message" style="text-align: center; font-weight: 500;"></p>
+  <h2>Заповни форму:</h2>
+  <p id="status-message"></p>
 
   <form onsubmit="submitForm(event)">
     <label for="tu_id">Top User ID:</label>
