@@ -74,14 +74,9 @@
     }
   </style> 
   
-  <script> 
-
-    if (window.Telegram && Telegram.WebApp) {
-  Telegram.WebApp.ready(); // обовʼязково для коректного запуску
-}
 
 <script>
-  if (window.Telegram && Telegram.WebApp) {
+  if (Telegram.WebApp) {
     Telegram.WebApp.ready(); // обов'язково для коректного запуску
   }
 
