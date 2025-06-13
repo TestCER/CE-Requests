@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>CE Request Form</title>
+
+  <!-- Telegram SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
     :root {
       --bg-color: #ffffff;
@@ -80,13 +84,12 @@
     }
   </style>
 
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
   <script>
-    if (Telegram.WebApp) {
-      Telegram.WebApp.ready();
-    }
+    window.onload = () => {
+      if (window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.ready();
+      }
+    };
 
     async function submitForm(event) {
       event.preventDefault();
@@ -108,8 +111,7 @@
         return alert("Please fill all fields and select consent option.");
       }
 
-      // Отримати Telegram user_id (тільки якщо відкрито через WebApp)
-      const telegramUser = Telegram.WebApp?.initDataUnsafe?.user;
+      const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
       console.log("Telegram user object:", telegramUser);
       const telegram_user_id = telegramUser?.id || "unknown";
 
