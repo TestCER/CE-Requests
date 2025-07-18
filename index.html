@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta charset="UTF-8">
   <title>CE Request Form</title>
 
@@ -85,11 +87,13 @@
   </style>
 
   <script>
-    window.onload = () => {
-      if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.ready();
-      }
-    };
+  window.onload = () => {
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand(); // Важливо для мобільних
+    }
+  };
+
 
     async function submitForm(event) {
       event.preventDefault();
