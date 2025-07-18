@@ -95,7 +95,7 @@
       event.preventDefault();
 
       const tu_id = document.getElementById("tu_id").value;
-      const ru_id = document.getElementById("ru_id").value;
+      const tu_login = document.getElementById("tu_login").value;
       const email = document.getElementById("email").value;
       const consent = document.getElementById("consent").value;
       const statusMessage = document.getElementById("status-message");
@@ -107,7 +107,7 @@
         return alert("Invalid email");
       }
 
-      if (!tu_id || !ru_id || !email || consent === "") {
+      if (!tu_id || !tu_login || !email || consent === "") {
         return alert("Please fill all fields and select consent option.");
       }
 
@@ -117,7 +117,7 @@
 
       const data = {
         tu_id,
-        ru_id,
+        tu_login,
         email,
         consent,
         telegram_user_id
@@ -159,8 +159,8 @@
     <label for="tu_id">Top User ID:</label>
     <input id="tu_id" type="number" required>
 
-    <label for="ru_id">Regular User ID:</label>
-    <input id="ru_id" type="number" required>
+    <label for="tu_login">TU login:</label>
+    <input id="tu_login" type="email" required>
 
     <label for="email">Top User Email:</label>
     <input id="email" type="email" required>
