@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <meta charset="UTF-8">
   <title>CE Request Form</title>
@@ -15,8 +15,8 @@
       --text-color: #222222;
       --primary-color: #0088cc;
       --border-radius: 12px;
-      --input-padding: 14px;
-      --font-size: 16px;
+      --input-padding: 16px;
+      --font-size: 18px;
     }
 
     body {
@@ -36,9 +36,10 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      max-width: 400px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 100%;
     }
+
 
     label {
       font-weight: 500;
@@ -90,7 +91,7 @@
   window.onload = () => {
     if (window.Telegram && Telegram.WebApp) {
       Telegram.WebApp.ready();
-      Telegram.WebApp.expand(); // Важливо для мобільних
+      Telegram.WebApp.expand(); 
     }
   };
 
