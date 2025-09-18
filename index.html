@@ -102,7 +102,6 @@
       const tu_id = document.getElementById("tu_id").value;
       const tu_login = document.getElementById("tu_login").value;
       const email = document.getElementById("email").value;
-      const consent = document.getElementById("consent").value;
       const statusMessage = document.getElementById("status-message");
 
       statusMessage.textContent = "";
@@ -112,7 +111,7 @@
         return alert("Invalid email");
       }
 
-      if (!tu_id || !tu_login || !email || consent === "") {
+      if (!tu_id || !tu_login || !email === "") {
         return alert("Please fill all fields and select consent option.");
       }
 
@@ -124,7 +123,6 @@
         tu_id,
         tu_login,
         email,
-        consent,
         telegram_user_id
       };
 
@@ -169,13 +167,6 @@
 
     <label for="email">Top User Email (email address TU wants to share with RU):</label> 
     <input id="email" type="email" required>
-
-    <label for="consent">Top User Consent:</label>
-    <select id="consent" required>
-      <option value="">--Choose--</option>
-      <option value="yes">Agree</option>
-      <option value="no">Disagree</option>
-    </select>
 
     <button type="submit">Done</button>
   </form>
