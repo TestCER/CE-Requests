@@ -100,7 +100,6 @@
       event.preventDefault();
 
       const tu_id = document.getElementById("tu_id").value;
-      const tu_login = document.getElementById("tu_login").value;
       const email = document.getElementById("email").value;
       const statusMessage = document.getElementById("status-message");
 
@@ -121,7 +120,6 @@
 
       const data = {
         tu_id,
-        tu_login,
         email,
         telegram_user_id
       };
@@ -161,9 +159,6 @@
   <form onsubmit="submitForm(event)">
     <label for="tu_id">TU ID:</label>
     <input id="tu_id" type="number" required>
-
-    <label for="tu_login">TU login (the email TU uses to log in to their account):</label>
-    <input id="tu_login" type="email" required>
 
     <label for="email">TU Email (email address TU wants to share with RU):</label> 
     <input id="email" type="email" required>
