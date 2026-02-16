@@ -92,112 +92,11 @@
     }
   </style>
 
-  <script>
-    console.info("CE Requests build v2025-10-24-3");
-
-    // ▶️ Вкажи свій вебхук Make:
-    const WEBHOOK_URL = "https://hook.eu2.make.com/44444jbda9zx5kc16u4hggz28rwmh8nr";
-
-    // Ініціалізація Telegram WebApp (безпечно)
-    document.addEventListener("DOMContentLoaded", () => {
-      try {
-        if (window.Telegram?.WebApp) {
-          Telegram.WebApp.ready();
-          Telegram.WebApp.expand();
-        }
-      } catch (e) {
-        console.warn("Telegram WebApp init warning:", e);
-      }
-
-      // Підписуємося на submit через JS, без інлайн-обробника
-      const form = document.getElementById("ce-form");
-      form?.addEventListener("submit", submitForm);
-    });
-
-    function setStatus(text, color = "") {
-      const el = document.getElementById("status-message");
-      if (!el) return;
-      el.textContent = text || "";
-      el.style.color = color || "";
-    }
-
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
-    }
-
-    async function submitForm(event) {
-      event.preventDefault();
-
-      const tuIdEl = document.getElementById("tu_id");
-      const emailEl = document.getElementById("email");
-      const submitBtn = document.getElementById("submit-btn");
-
-      const tu_id = (tuIdEl?.value ?? "").toString().trim();
-      const email = (emailEl?.value ?? "").toString().trim();
-
-      setStatus("", "");
-      if (submitBtn) submitBtn.disabled = true;
-
-      // ✅ Валідація (без жодного tu_login)
-      if (!tu_id || !email) {
-        alert("Please fill all fields.");
-        if (submitBtn) submitBtn.disabled = false;
-        return;
-      }
-      if (!validateEmail(email)) {
-        alert("Invalid email address.");
-        if (submitBtn) submitBtn.disabled = false;
-        return;
-      }
-
-      // Отримуємо Telegram user id (або "unknown" поза Telegram)
-      let telegram_user_id = "unknown";
-      try {
-        telegram_user_id = window.Telegram?.WebApp?.initDataUnsafe?.user?.id ?? "unknown";
-      } catch { /* no-op */ }
-
-      const payload = { tu_id, email, telegram_user_id };
-      console.log("Submitting payload:", payload);
-
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json, text/plain, */*"
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (response.ok) {
-          setStatus("Thank you! Your data has been submitted successfully.", "green");
-          document.getElementById("ce-form")?.reset();
-
-          setTimeout(() => {
-            try { window.Telegram?.WebApp?.close?.(); } catch {}
-          }, 1500);
-        } else {
-          let extra = "";
-          try { extra = await response.text(); } catch {}
-          alert("Error sending data." + (extra ? ` Details: ${extra}` : ""));
-          setStatus("Failed to send data.", "crimson");
-        }
-      } catch (error) {
-        console.error("Fetch error:", error);
-        alert("Connection error.");
-        setStatus("Connection error. Please try again.", "crimson");
-      } finally {
-        if (submitBtn) submitBtn.disabled = false;
-      }
-    }
-  </script>
 </head>
 
 <body>
   <h2>You can forward users' emails using the new feature in your admin panel. </h2>
-  <p> To do this, open the “Contact requests” tab --> “TU email validation". </p> 
-
+  <p> To do this, open the “Contact requests” tab ➡️ “TU email validation". </p> 
 
 </body>
 </html>
