@@ -1,102 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
   <meta charset="UTF-8" />
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
+  <meta name="color-scheme" content="light dark" />
   <title>CE Request Form</title>
 
   <!-- Telegram SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    :root {
-      --bg-color: #ffffff;
-      --text-color: #222222;
-      --primary-color: #0088cc;
-      --border-radius: 12px;
-      --input-padding: 16px;
-      --font-size: 18px;
+    :root{
+      --bg: #0b1020;
+      --surface: rgba(255,255,255,.08);
+      --surface-2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --accent: #35b6ff;
+      --accent-2: #7c5cff;
+
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
     }
 
-    body {
+    /* Telegram theme override (set via JS) */
+    :root.tg {
+      --bg: var(--tg-bg, #0b1020);
+      --text: var(--tg-text, rgba(255,255,255,.92));
+      --muted: var(--tg-hint, rgba(255,255,255,.72));
+      --accent: var(--tg-button, #35b6ff);
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      min-height: 100dvh;
+      padding: 22px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(53,182,255,.30), transparent 55%),
+        radial-gradient(900px 500px at 90% 20%, rgba(124,92,255,.25), transparent 55%),
+        radial-gradient(900px 700px at 50% 110%, rgba(255,255,255,.08), transparent 55%),
+        var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .wrap{
+      width: min(620px, 100%);
+    }
+
+    .card{
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 22px;
+      overflow: hidden;
+      position: relative;
+      animation: pop .35s ease-out both;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(400px 120px at 20% 0%, rgba(53,182,255,.25), transparent 60%),
+        radial-gradient(420px 140px at 85% 10%, rgba(124,92,255,.22), transparent 60%);
+      pointer-events:none;
+      filter: blur(2px);
+      opacity: .9;
+    }
+
+    .content{ position: relative; }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 14px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .2px;
+      font-size: 13px;
+      user-select:none;
+    }
+
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 4px rgba(53,182,255,.12);
+    }
+
+    h1{
+      margin: 6px 0 8px;
+      font-size: clamp(20px, 4.8vw, 28px);
+      line-height: 1.15;
+      letter-spacing: -0.3px;
+    }
+
+    p.lead{
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .steps{
+      display:grid;
+      gap: 12px;
+      margin: 14px 0 16px;
+    }
+
+    .step{
+      display:flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .num{
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      font-weight: 800;
+      font-size: 13px;
+      color: #07101a;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      flex: 0 0 auto;
+    }
+
+    .stepTitle{
+      font-weight: 750;
+      margin: 0 0 4px;
+      font-size: 14px;
+      letter-spacing: .2px;
+    }
+
+    .stepText{
       margin: 0;
-      padding: 24px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 24px;
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      font-weight: 650;
+      font-size: 13px;
+      white-space: nowrap;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      max-width: 100%;
+    .arrow{
+      opacity: .75;
+      padding: 0 8px;
+      font-weight: 700;
     }
 
-    label {
-      font-weight: 500;
-      font-size: var(--font-size);
+    .note{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,.05);
+      border: 1px dashed rgba(255,255,255,.16);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    input, select, button {
-      font-size: var(--font-size);
+    @keyframes pop{
+      from { transform: translateY(10px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
     }
 
-    input, select {
-      padding: var(--input-padding);
-      border: 1px solid #ccc;
-      border-radius: var(--border-radius);
-      outline: none;
-      transition: border-color 0.2s;
+    /* Light mode fallback if Telegram gives light theme */
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f6f7fb;
+        --surface: rgba(255,255,255,.75);
+        --surface-2: rgba(255,255,255,.55);
+        --border: rgba(15,18,30,.10);
+        --text: rgba(15,18,30,.92);
+        --muted: rgba(15,18,30,.65);
+        --shadow: 0 18px 60px rgba(18,22,38,.15);
+      }
+      body{
+        background:
+          radial-gradient(1200px 600px at 10% 10%, rgba(53,182,255,.22), transparent 55%),
+          radial-gradient(900px 500px at 90% 20%, rgba(124,92,255,.18), transparent 55%),
+          radial-gradient(900px 700px at 50% 110%, rgba(0,0,0,.05), transparent 55%),
+          var(--bg);
+      }
+      .card{
+        background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
+      }
+      .badge, .pill{
+        background: rgba(255,255,255,.75);
+      }
+      .step{
+        background: rgba(255,255,255,.65);
+      }
+      .num{ color: #06111a; }
     }
 
-    input:focus, select:focus {
-      border-color: var(--primary-color);
-    }
-
-    button {
-      padding: var(--input-padding);
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: background-color 0.3s, opacity 0.2s;
-    }
-
-    button:hover { background-color: #006fa1; }
-
-    button:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    #status-message {
-      text-align: center;
-      font-weight: 500;
-      margin-bottom: 16px;
-      min-height: 1.25em;
-    }
-
-    @media (max-width: 480px) {
-      body { padding: 16px; }
+    @media (max-width: 480px){
+      body{ padding: 16px; }
+      .card{ padding: 18px; }
+      .step{ padding: 12px; }
     }
   </style>
 
+  <script>
+    (function () {
+      const tg = window.Telegram?.WebApp;
+      if (!tg) return;
+
+      tg.ready();
+      tg.expand();
+
+      const p = tg.themeParams || {};
+      const root = document.documentElement;
+      root.classList.add('tg');
+
+      const set = (name, value) => value && root.style.setProperty(name, value);
+
+      set('--tg-bg', p.bg_color);
+      set('--tg-text', p.text_color);
+      set('--tg-hint', p.hint_color);
+      set('--tg-link', p.link_color);
+      set('--tg-button', p.button_color);
+      set('--tg-button-text', p.button_text_color);
+
+      // Optional: match Telegram background
+      if (p.bg_color) tg.setBackgroundColor(p.bg_color);
+    })();
+  </script>
 </head>
 
 <body>
-  <h2>You can forward users' emails using the new feature in your admin panel. </h2>
-  <p> To do this, open the “Contact requests” tab ➡️ “TU email validation". </p> 
+  <main class="wrap">
+    <section class="card" aria-label="CE instructions card">
+      <div class="content">
+        <div class="top">
+          <span class="badge"><span class="dot"></span> Contact Exchange</span>
+        </div>
 
+        <h1>Forward users’ emails from the admin panel</h1>
+        <p class="lead">
+          The new feature is already in your admin panel. 
+        </p>
+
+        <div class="steps" role="list">
+          <div class="step" role="listitem">
+            <div class="num">1</div>
+            <div>
+              <div class="stepTitle">Open the correct tab</div>
+              <p class="stepText">
+                Go to <span class="pill">Contact requests</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="step" role="listitem">
+            <div class="num">2</div>
+            <div>
+              <div class="stepTitle">Find the validation section</div>
+              <p class="stepText">
+                Open <span class="pill">TU email validation</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="step" role="listitem">
+            <div class="num">3</div>
+            <div>
+              <div class="stepTitle">That’s the path</div>
+              <p class="stepText">
+                <span class="pill">Contact requests</span><span class="arrow">➡</span><span class="pill">TU email validation</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          Tip: If you can’t see the tab, it’s usually a stale admin session — refresh and try again. 
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
